@@ -1,4 +1,5 @@
- 'use client'
+'use client'
+
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
@@ -8,6 +9,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import { ProductForm } from './components/ProductForm'
 
 interface Product {
   id: number
@@ -31,8 +33,8 @@ interface Product {
 const initialProducts: Product[] = [
   {
     id: 1,
-    name: 'Sample Product 1',
-    description: 'This is a sample product description',
+    name: 'محصول نمونه ۱',
+    description: 'توضیحات محصول نمونه',
     price: 99.99,
     image: '/placeholder.png',
     bulkPricing: [
@@ -40,12 +42,12 @@ const initialProducts: Product[] = [
       { quantity: 10000, price: 79.99 },
     ],
     shippingMethod: 'supplier',
-    shippingAreas: ['Tehran', 'Isfahan', 'Shiraz'],
+    shippingAreas: ['تهران', 'اصفهان', 'شیراز'],
     warehouses: [
       {
         id: 1,
-        name: 'Main Warehouse',
-        address: 'Tehran, Iran',
+        name: 'انبار اصلی',
+        address: 'تهران، ایران',
       },
     ],
   },
@@ -55,6 +57,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>(initialProducts)
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [showAddProduct, setShowAddProduct] = useState(false)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -80,23 +83,40 @@ export default function ProductsPage() {
     }
   }
 
+  if (showAddProduct) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-xl font-semibold text-gray-900">افزودن محصول جدید</h1>
+          <button
+            onClick={() => setShowAddProduct(false)}
+            className="text-gray-600 hover:text-gray-900"
+          >
+            بازگشت به لیست محصولات
+          </button>
+        </div>
+        <ProductForm />
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Products</h1>
+          <h1 className="text-xl font-semibold text-gray-900">محصولات</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all products in your inventory including their name, price,
-            and other details.
+            لیست تمام محصولات موجود در انبار شامل نام، قیمت و جزئیات دیگر.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
+            onClick={() => setShowAddProduct(true)}
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
           >
             <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-            Add Product
+            افزودن محصول
           </button>
         </div>
       </div>
@@ -108,7 +128,7 @@ export default function ProductsPage() {
           className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <ArrowUpTrayIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-          Import
+          وارد کردن
         </button>
         <button
           type="button"
@@ -116,7 +136,7 @@ export default function ProductsPage() {
           className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <ArrowDownTrayIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-          Export
+          خروجی گرفتن
         </button>
       </div>
 
@@ -128,30 +148,30 @@ export default function ProductsPage() {
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                    className="py-3.5 pl-4 pr-3 text-right text-sm font-semibold text-gray-900 sm:pl-0"
                   >
-                    Product
+                    محصول
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                   >
-                    Price
+                    قیمت
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                   >
-                    Bulk Pricing
+                    قیمت عمده
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                   >
-                    Shipping
+                    روش ارسال
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Actions</span>
+                    <span className="sr-only">عملیات</span>
                   </th>
                 </tr>
               </thead>
@@ -167,29 +187,29 @@ export default function ProductsPage() {
                             alt=""
                           />
                         </div>
-                        <div className="ml-4">
+                        <div className="mr-4">
                           <div className="font-medium text-gray-900">{product.name}</div>
                           <div className="text-gray-500">{product.description}</div>
                         </div>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      ${product.price}
+                      {product.price.toLocaleString()} تومان
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {product.bulkPricing.map((bp) => (
                         <div key={bp.quantity}>
-                          {bp.quantity}+: ${bp.price}
+                          {bp.quantity}+: {bp.price.toLocaleString()} تومان
                         </div>
                       ))}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product.shippingMethod === 'supplier' ? 'Supplier' : 'Company'}
+                      {product.shippingMethod === 'supplier' ? 'توسط تامین‌کننده' : 'توسط شرکت'}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <button
                         type="button"
-                        className="text-primary-600 hover:text-primary-900 mr-4"
+                        className="text-primary-600 hover:text-primary-900 ml-4"
                       >
                         <PencilIcon className="h-5 w-5" aria-hidden="true" />
                       </button>
@@ -220,7 +240,7 @@ export default function ProductsPage() {
               <div>
                 <div className="mt-3 text-center sm:mt-5">
                   <h3 className="text-lg font-medium leading-6 text-gray-900">
-                    Import Products
+                    وارد کردن محصولات
                   </h3>
                   <div className="mt-2">
                     <div
@@ -234,18 +254,18 @@ export default function ProductsPage() {
                             htmlFor="file-upload"
                             className="relative cursor-pointer rounded-md bg-white font-medium text-primary-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:text-primary-500"
                           >
-                            <span>Upload a file</span>
+                            <span>انتخاب فایل</span>
                           </label>
-                          <p className="pl-1">or drag and drop</p>
+                          <p className="mr-1">یا فایل را اینجا رها کنید</p>
                         </div>
                         <p className="text-xs text-gray-500">
-                          Excel files only (.xlsx, .xls)
+                          فقط فایل‌های اکسل (.xlsx, .xls)
                         </p>
                       </div>
                     </div>
                     {selectedFile && (
                       <p className="mt-2 text-sm text-gray-500">
-                        Selected file: {selectedFile.name}
+                        فایل انتخاب شده: {selectedFile.name}
                       </p>
                     )}
                   </div>
@@ -257,7 +277,7 @@ export default function ProductsPage() {
                   className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                   onClick={handleImport}
                 >
-                  Import
+                  وارد کردن
                 </button>
                 <button
                   type="button"
@@ -267,7 +287,7 @@ export default function ProductsPage() {
                     setSelectedFile(null)
                   }}
                 >
-                  Cancel
+                  انصراف
                 </button>
               </div>
             </div>

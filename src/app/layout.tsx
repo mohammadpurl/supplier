@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Vazirmatn } from 'next/font/google'
 import './globals.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const vazirmatn = Vazirmatn({ subsets: ['arabic'] })
 
 export const metadata: Metadata = {
-  title: 'Supplier Dashboard',
-  description: 'Management dashboard for suppliers',
+  title: 'داشبورد تامین‌کنندگان',
+  description: 'داشبورد مدیریتی برای تامین‌کنندگان',
 }
 
 export default function RootLayout({
@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="fa" dir="rtl">
+      <body className={vazirmatn.className}>
         {children}
         <ToastContainer />
       </body>

@@ -20,6 +20,13 @@ module.exports = {
           800: '#075985',
           900: '#0c4a6e',
         },
+        iconPrimary:{
+          50:'#ff7e00',
+          100:'#ff9f04'
+        },
+        iconSecondry:{
+          50:'#007945'
+        },
       },
     },
   },
