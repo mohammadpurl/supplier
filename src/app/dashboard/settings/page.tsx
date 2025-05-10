@@ -40,6 +40,61 @@ const initialShippingAreas: ShippingArea[] = [
   },
 ]
 
+const recentActivity = [
+  {
+    id: 1,
+    type: 'order',
+    title: 'سفارش جدید دریافت شد',
+    description: 'سفارش شماره ۱۲۳۴۵ از علی رضایی',
+    time: '۲ ساعت پیش',
+  },
+  {
+    id: 2,
+    type: 'product',
+    title: 'محصول به‌روزرسانی شد',
+    description: 'قیمت محصول شماره ۷۸۹ به‌روزرسانی شد',
+    time: '۴ ساعت پیش',
+  },
+  {
+    id: 3,
+    type: 'shipping',
+    title: 'سفارش ارسال شد',
+    description: 'سفارش شماره ۱۲۳۴۰ ارسال شد',
+    time: '۶ ساعت پیش',
+  },
+]
+
+const stats = [
+  {
+    name: 'تعداد کل محصولات',
+    value: '۱٬۲۳۴',
+    icon: CubeIcon,
+    change: '+۱۲٪',
+    changeType: 'positive',
+  },
+  {
+    name: 'سفارشات فعال',
+    value: '۵۶',
+    icon: TruckIcon,
+    change: '+۸٪',
+    changeType: 'positive',
+  },
+  {
+    name: 'کل درآمد',
+    value: '۴۵٬۶۷۸ تومان',
+    icon: CurrencyDollarIcon,
+    change: '+۲۳٪',
+    changeType: 'positive',
+  },
+  {
+    name: 'تعداد کل مشتریان',
+    value: '۷۸۹',
+    icon: UserGroupIcon,
+    change: '+۵٪',
+    changeType: 'positive',
+  },
+]
+
 export default function SettingsPage() {
   const [warehouses, setWarehouses] = useState<Warehouse[]>(initialWarehouses)
   const [shippingAreas, setShippingAreas] = useState<ShippingArea[]>(initialShippingAreas)
