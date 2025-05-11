@@ -3,6 +3,8 @@ import { Vazirmatn } from 'next/font/google'
 import './globals.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import AuthProvider from '@/providers/auth-provider'
+import { Notifications } from './_components/notification/notifications'
 
 const vazirmatn = Vazirmatn({ subsets: ['arabic'] })
 
@@ -18,7 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="font-sans">{children}</body>
+      <body className="font-sans antialiased grainy">
+      <Notifications />
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+      </body>
     </html>
   )
 } 
