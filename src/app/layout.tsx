@@ -18,10 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={vazirmatn.className}>
-        {children}
-        <ToastContainer />
-      </body>
+      <body className="font-sans">{children}</body>
     </html>
   )
 } 

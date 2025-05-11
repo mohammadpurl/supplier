@@ -25,3 +25,57 @@ body {
         @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm;
     }
 }
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Regular.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Bold.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Light.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Medium.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Heavy.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Heavy.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YekanBakh';
+    src: url('/fonts/yekanbakh/YekanBakh-Fat.woff2') format('woff2'),
+        url('/fonts/yekanbakh/YekanBakh-Fat.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
