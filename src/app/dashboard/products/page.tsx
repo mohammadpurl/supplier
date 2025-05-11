@@ -10,6 +10,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import { ProductForm } from './components/ProductForm'
+import { Table } from './components/Table'
 
 interface Product {
   id: number
@@ -53,11 +54,47 @@ const initialProducts: Product[] = [
   },
 ]
 
+const columns = [
+  { header: "نام", accessor: "name" },
+  { header: "قیمت", accessor: "price", render: (value: number) => value + " تومان" },
+  { header: "توضیحات", accessor: "description" },
+  { header: "آیدی", accessor: "id", hidden: true },
+  {
+    header: "عملیات",
+    accessor: "actions" as any,
+    render: (_: any, row: Product) => (
+      <div className="flex gap-2">
+        <button
+          className="text-primary-600 hover:text-primary-900"
+          onClick={e => {
+            e.stopPropagation();
+            // ویرایش
+            alert("ویرایش: " + row.id);
+          }}
+        >
+          <PencilIcon className="h-5 w-5" />
+        </button>
+        <button
+          className="text-red-600 hover:text-red-900"
+          onClick={e => {
+            e.stopPropagation();
+            // حذف
+            alert("حذف: " + row.id);
+          }}
+        >
+          <TrashIcon className="h-5 w-5" />
+        </button>
+      </div>
+    ),
+  },
+]
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>(initialProducts)
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showAddProduct, setShowAddProduct] = useState(false)
+  const [selectedRows, setSelectedRows] = useState<Product[]>([])
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -143,89 +180,27 @@ export default function ProductsPage() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-right text-sm font-semibold text-gray-900 sm:pl-0"
-                  >
-                    محصول
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    قیمت
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    قیمت عمده
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    روش ارسال
-                  </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">عملیات</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
-                      <div className="flex items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={product.image}
-                            alt=""
-                          />
-                        </div>
-                        <div className="mr-4">
-                          <div className="font-medium text-gray-900">{product.name}</div>
-                          <div className="text-gray-500">{product.description}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product.price.toLocaleString()} تومان
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product.bulkPricing.map((bp) => (
-                        <div key={bp.quantity}>
-                          {bp.quantity}+: {bp.price.toLocaleString()} تومان
-                        </div>
-                      ))}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product.shippingMethod === 'supplier' ? 'توسط تامین‌کننده' : 'توسط شرکت'}
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <button
-                        type="button"
-                        className="text-primary-600 hover:text-primary-900 ml-4"
-                      >
-                        <PencilIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                      <button
-                        type="button"
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <Table
+              columns={columns}
+              data={products}
+              selectable={true}
+              onSelectionChange={setSelectedRows}
+            />
           </div>
         </div>
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        <button
+          className="btn-primary"
+          onClick={() => {
+            // همه سطرهای انتخاب‌شده
+            console.log(selectedRows);
+            alert("سطرهای انتخاب‌شده: " + selectedRows.map(r => r.id).join(", "));
+          }}
+        >
+          دریافت سطرهای انتخاب‌شده
+        </button>
       </div>
 
       {/* Import Modal */}
