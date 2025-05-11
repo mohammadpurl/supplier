@@ -12,6 +12,7 @@ import {
 import { ProductForm } from './components/ProductForm'
 import { Table } from './components/Table'
 
+
 interface Product {
   id: number
   name: string
@@ -31,34 +32,11 @@ interface Product {
   }[]
 }
 
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    name: 'محصول نمونه ۱',
-    description: 'توضیحات محصول نمونه',
-    price: 99.99,
-    image: '/placeholder.png',
-    bulkPricing: [
-      { quantity: 1000, price: 89.99 },
-      { quantity: 10000, price: 79.99 },
-    ],
-    shippingMethod: 'supplier',
-    shippingAreas: ['تهران', 'اصفهان', 'شیراز'],
-    warehouses: [
-      {
-        id: 1,
-        name: 'انبار اصلی',
-        address: 'تهران، ایران',
-      },
-    ],
-  },
-]
-
 const columns = [
-  { header: "نام", accessor: "name" },
-  { header: "قیمت", accessor: "price", render: (value: number) => value + " تومان" },
-  { header: "توضیحات", accessor: "description" },
-  { header: "آیدی", accessor: "id", hidden: true },
+  { header: "نام", accessor: "name" as keyof Product, sortable: true, width: "200px" },
+  { header: "قیمت", accessor: "price" as keyof Product, sortable: true, width: "120px", render: (v: number) => v + " تومان" },
+  { header: "توضیحات", accessor: "description" as keyof Product, width: "300px" },
+  { header: "آیدی", accessor: "id" as keyof Product, hidden: true },
   {
     header: "عملیات",
     accessor: "actions" as any,
@@ -86,6 +64,69 @@ const columns = [
         </button>
       </div>
     ),
+    width: "120px"
+  },
+]
+
+const initialProducts: Product[] = [
+  {
+    id: 1,
+    name: 'محصول نمونه ۱',
+    description: 'توضیحات محصول نمونه',
+    price: 99.99,
+    image: '/placeholder.png',
+    bulkPricing: [
+      { quantity: 1000, price: 89.99 },
+      { quantity: 10000, price: 79.99 },
+    ],
+    shippingMethod: 'supplier',
+    shippingAreas: ['تهران', 'اصفهان', 'شیراز'],
+    warehouses: [
+      {
+        id: 1,
+        name: 'انبار اصلی',
+        address: 'تهران، ایران',
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'محصول نمونه ۲',
+    description: 'توضیحات محصول دوم',
+    price: 150.5,
+    image: '/placeholder.png',
+    bulkPricing: [
+      { quantity: 500, price: 140.5 },
+      { quantity: 2000, price: 130.5 },
+    ],
+    shippingMethod: 'company',
+    shippingAreas: ['مشهد', 'تبریز'],
+    warehouses: [
+      {
+        id: 2,
+        name: 'انبار دوم',
+        address: 'مشهد، ایران',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'محصول تست ۳',
+    description: 'یک محصول تستی دیگر',
+    price: 75.25,
+    image: '/placeholder.png',
+    bulkPricing: [
+      { quantity: 100, price: 70.25 },
+    ],
+    shippingMethod: 'supplier',
+    shippingAreas: ['شیراز'],
+    warehouses: [
+      {
+        id: 3,
+        name: 'انبار سوم',
+        address: 'شیراز، ایران',
+      },
+    ],
   },
 ]
 
