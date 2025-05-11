@@ -14,7 +14,7 @@ export default function DashboardLayout({
         <div className="flex-1 pr-0 lg:pr-64">
           <Header />
           <main className="py-10">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 border-primary-100 bg-white ">
               {children}
             </div>
           </main>

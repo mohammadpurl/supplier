@@ -30,6 +30,16 @@ const productFormSchema = z.object({
   bulkQuantity: z.string().refine((val) => !isNaN(Number(val)), {
     message: 'تعداد عمده باید یک عدد معتبر باشد',
   }),
+  tieredPrices: z.array(
+    z.object({
+      minQuantity: z.string().refine((val) => !isNaN(Number(val)), {
+        message: 'حداقل تعداد باید یک عدد معتبر باشد',
+      }),
+      unitPrice: z.string().refine((val) => !isNaN(Number(val)), {
+        message: 'قیمت واحد باید یک عدد معتبر باشد',
+      }),
+    })
+  ),
 })
 
 type ProductFormValues = z.infer<typeof productFormSchema>
@@ -43,6 +53,7 @@ export function ProductForm() {
       price: '',
       bulkPrice: '',
       bulkQuantity: '',
+      tieredPrices: [],
     },
   })
 
@@ -52,7 +63,7 @@ export function ProductForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
         <FormField
           control={form.control}
           name="name"
@@ -128,6 +139,61 @@ export function ProductForm() {
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="tieredPrices"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>قیمت‌گذاری پلکانی</FormLabel>
+              <FormControl>
+                <div>
+                  {field.value.map((tier, index) => (
+                    <div key={index} className="flex space-x-2">
+                      <Input
+                        type="number"
+                        placeholder="حداقل تعداد"
+                        value={tier.minQuantity}
+                        onChange={(e) => {
+                          const newTiers = [...field.value];
+                          newTiers[index].minQuantity = e.target.value;
+                          field.onChange(newTiers);
+                        }}
+                      />
+                      <Input
+                        type="number"
+                        placeholder="قیمت واحد"
+                        value={tier.unitPrice}
+                        onChange={(e) => {
+                          const newTiers = [...field.value];
+                          newTiers[index].unitPrice = e.target.value;
+                          field.onChange(newTiers);
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const newTiers = field.value.filter((_, i) => i !== index);
+                          field.onChange(newTiers);
+                        }}
+                      >
+                        حذف
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      field.onChange([...field.value, { minQuantity: '', unitPrice: '' }]);
+                    }}
+                  >
+                    افزودن بازه قیمتی
+                  </Button>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit">ذخیره محصول</Button>
       </form>
     </Form>
