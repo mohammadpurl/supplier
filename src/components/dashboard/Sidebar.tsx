@@ -26,6 +26,8 @@ export default function Sidebar() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const handleCloseSidebar = () => setIsMobileMenuOpen(false)
+
   return (
     <>
       {/* Mobile menu */}
@@ -123,6 +125,15 @@ export default function Sidebar() {
                 </nav>
               </div>
             </div>
+            <button
+              className="block md:hidden absolute top-4 left-4 z-50"
+              onClick={handleCloseSidebar}
+              aria-label="بستن سایدبار"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
