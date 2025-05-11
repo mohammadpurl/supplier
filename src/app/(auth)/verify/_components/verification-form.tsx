@@ -150,8 +150,8 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
           showHours={false}
         /> */}
         <Button
-          isLink={true}
-          isDisabled={!showResendCode}
+          // isLink={true}
+          disabled={!showResendCode}
           onClick={resendAuthCode}
           className="text-blue-700"
         >
@@ -160,8 +160,8 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
         <Button
           type="submit"
           // variant="primary"
-          isLoading={verifyPendingState}
-          isDisabled={!isValid}
+          // loading={verifyPendingState}
+          disabled={!isValid}
           className="bg-blue-700"
         >
           تایید و ادامه
