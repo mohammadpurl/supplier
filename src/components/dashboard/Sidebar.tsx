@@ -64,10 +64,12 @@ export default function Sidebar() {
             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
               {navigation.map((item) => {
                 const isActive = pathname === item.href
+                
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={handleCloseSidebar}
                     className={`group flex items-center rounded-md px-2 py-2 text-sm font-medium ${
                       isActive
                         ? 'bg-gray-100 text-gray-900'
@@ -108,6 +110,7 @@ export default function Sidebar() {
                       <Link
                         key={item.name}
                         href={item.href}
+                        onClick={handleCloseSidebar}
                         className={`group flex items-center rounded-md px-2 py-2 text-sm font-medium ${
                           isActive
                             ? 'bg-gray-100 text-gray-900'

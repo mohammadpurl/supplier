@@ -1,88 +1,66 @@
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { BellIcon } from '@heroicons/react/24/outline'
-
+import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { useFormState, useFormStatus } from "react-dom";
+import { getSession, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/actions";
+import { Loading } from '@/app/_components/loading';
+import { IconLogout } from '@/app/_components/icons/icons';
+import HeadeUserSession, { LogoutButton } from './Heade-user-session';
 export default function Header() {
+  const { data: session, status, update } = useSession();
+  const [signoutState, action] = useFormState(logout, undefined);
+  const router = useRouter();
+  
+
+  useEffect(() => {
+    if (signoutState?.isSuccess) {
+      const fetchSession = async () => await getSession();
+      fetchSession();
+      location.reload();
+      router.push("/");
+    }
+  }, [signoutState, router, status, update, session]);
+
+  console.log("session isssssssssssssssssssss",session?.user)
+
   return (
-    <header className="bg-white shadow">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 justify-between">
-          <div className="flex">
-            <div className="flex flex-shrink-0 items-center">
-              {/* Add your logo here if needed */}
+    <header className="sticky top-0 z-40 w-full bg-white shadow">
+      <div className="container mx-auto px-10 sm:px-32">
+        <div className="flex h-16 items-center justify-between">
+          {/* Left side */}
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <h1 className="text-xl font-bold text-gray-900">داشبورد تامین‌کنندگان</h1>
             </div>
           </div>
-          <div className="flex items-center">
+
+          {/* Right side */}
+          <div className="flex items-center gap-4  space-x-4">
+            {/* Notifications */}
             <button
               type="button"
               className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
-              <span className="sr-only">View notifications</span>
+              <span className="sr-only">مشاهده اعلان‌ها</span>
               <BellIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-
+            </button>           
+            <button
+              type="button"
+              className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            >
+              <span className="sr-only">مشاهده اعلان‌ها</span>
+              <UserCircleIcon className="h-6 w-6" aria-hidden="true" />
+            </button>   
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <div>
-                <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
-                  <span className="sr-only">Open user menu</span>
-                  <div className="h-8 w-8 rounded-full bg-gray-200" />
-                </Menu.Button>
-              </div>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={`${
-                          active ? 'bg-gray-100' : ''
-                        } block px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Your Profile
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={`${
-                          active ? 'bg-gray-100' : ''
-                        } block px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Settings
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href="#"
-                        className={`${
-                          active ? 'bg-gray-100' : ''
-                        } block px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Sign out
-                      </a>
-                    )}
-                  </Menu.Item>
-                </Menu.Items>
-              </Transition>
-            </Menu>
+            <HeadeUserSession />
           </div>
         </div>
       </div>
     </header>
   )
+
 } 

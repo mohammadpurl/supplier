@@ -39,8 +39,12 @@ export const {
   signOut,
   auth,
   handlers: { GET, POST },
+  
 } = NextAuth({
   ...authConfig,
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -57,6 +61,7 @@ export const {
               code: credentials.code as string,
             }
           );
+          console.log("logged innnnnnnnnnnn",user)
           // Auth.js expects the user object to be returned
           return {
             accessToken: user.access_token,
@@ -74,12 +79,15 @@ export const {
       if (user) {
         token.user = jwtDecode<UserToken>(user.accessToken);
         token.user.accessToken = user.accessToken;
+        console.log("jwt accessToken",token)
       }
 
       return token;
     },
     async session({ session, token }) {
+      console.log("dgggtttthgh",token)
       Object.assign(session.user, token.user ?? {});
+      console.log("sessionsessionsessionsessionsession",session)
       return session;
     },
   },
