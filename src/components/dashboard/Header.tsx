@@ -1,31 +1,12 @@
-'use client'
+'use server'
 
-import { Fragment, useEffect } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+
 import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline'
-import { useFormState, useFormStatus } from "react-dom";
-import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { logout } from "@/app/actions";
-import { Loading } from '@/app/_components/loading';
-import { IconLogout } from '@/app/_components/icons/icons';
-import HeadeUserSession, { LogoutButton } from './Heade-user-session';
-export default function Header() {
-  const { data: session, status, update } = useSession();
-  const [signoutState, action] = useFormState(logout, undefined);
-  const router = useRouter();
+import HeadeUserSession from './Heade-user-session'
+export default async function Header() {
+
   
 
-  useEffect(() => {
-    if (signoutState?.isSuccess) {
-      const fetchSession = async () => await getSession();
-      fetchSession();
-      location.reload();
-      router.push("/");
-    }
-  }, [signoutState, router, status, update, session]);
-
-  console.log("session isssssssssssssssssssss",session?.user)
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white shadow">
