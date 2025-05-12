@@ -10,7 +10,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import { ProductForm } from './components/ProductForm'
-import { Table } from './components/Table'
+import { Table } from '../../../components/Table'
 
 
 interface Product {
@@ -163,7 +163,7 @@ export default function ProductsPage() {
 
   if (showAddProduct) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="flex ">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-xl font-semibold text-gray-900">افزودن محصول جدید</h1>
           <button
@@ -237,7 +237,7 @@ export default function ProductsPage() {
           onClick={() => {
             // همه سطرهای انتخاب‌شده
             console.log(selectedRows);
-            alert("سطرهای انتخاب‌شده: " + selectedRows.map(r => r.id).join(", "));
+            alert("سطرهای انتخاب‌ شده: " + selectedRows.map(r => r.id).join(", "));
           }}
         >
           دریافت سطرهای انتخاب‌شده

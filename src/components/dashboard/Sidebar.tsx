@@ -13,13 +13,13 @@ import {
 } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'داشبورد', href: '/dashboard', icon: HomeIcon },
-  { name: 'محصولات', href: '/dashboard/products', icon: CubeIcon },
-  { name: 'سفارشات', href: '/dashboard/orders', icon: DocumentTextIcon },
-  { name: 'حمل و نقل', href: '/dashboard/shipping', icon: TruckIcon },
-  { name: 'مشتریان', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'گزارشات', href: '/dashboard/reports', icon: ChartBarIcon },
-  { name: 'تنظیمات', href: '/dashboard/settings', icon: Cog6ToothIcon },
+  { name: 'داشبورد', href: '/', icon: HomeIcon },
+  { name: 'محصولات', href: '/products', icon: CubeIcon },
+  { name: 'سفارشات', href: '/orders', icon: DocumentTextIcon },
+  { name: 'حمل و نقل', href: '/shipping', icon: TruckIcon },
+  { name: 'مشتریان', href: '/customers', icon: UserGroupIcon },
+  { name: 'گزارشات', href: '/reports', icon: ChartBarIcon },
+  { name: 'تنظیمات', href: '/settings', icon: Cog6ToothIcon },
 ]
 
 export default function Sidebar() {

@@ -14,10 +14,10 @@ export const authConfig = {
       const isAuthRoutes = authRoutes.includes(nextUrl.pathname);
 
       if (isAuthRoutes && isAuthenticated) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+        return Response.redirect(new URL("/", nextUrl));
       }
 
-      const isProtectedRoute = nextUrl.pathname.startsWith("/dashboard");
+      const isProtectedRoute = nextUrl.pathname.startsWith("/");
 
       if (isProtectedRoute && !isAuthenticated) {
         return Response.redirect(new URL("/signin", nextUrl));

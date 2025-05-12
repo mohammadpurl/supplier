@@ -75,7 +75,7 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
         // 3. بروزرسانی سشن فعلی
         update().then(() => {
           // 4. ریدایرکت به داشبورد با ارسال پارامتر auth برای اطمینان از بروزرسانی
-          window.location.href = "/dashboard" ;
+          window.location.href = "/" ;
         });
       });
     }

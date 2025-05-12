@@ -20,10 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="font-sans antialiased grainy">
+      <body className=" font-sans ">
       <Notifications />
       <AuthProvider>
+      <div className=" mx-auto">
         {children}
+      </div>
       </AuthProvider>
       </body>
     </html>
