@@ -124,8 +124,8 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
   return (
     <>
       <h5 className="text-2xl">کد تایید</h5>
-      <p className="mt-2">
-        وکیل تو دستیار مبتنی بر هوش مصنوعی تو برای تهیه مستندات حقوقی
+      <p className="mt-2 text-iconPrimary-50">
+       سامانه تامین کنندگان استاف مارکت (B2B) 
       </p>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -162,7 +162,7 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
           variant="primary"
           isLoading={verifyPendingState}
           isDisabled={!isValid}
-          className="bg-blue-700"
+          className="bg-iconSecondry-50  hover:bg-green-700"
         >
           تایید و ادامه
         </Button>

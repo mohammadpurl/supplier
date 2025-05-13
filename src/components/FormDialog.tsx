@@ -78,7 +78,7 @@ export function FormDialog({
           <div className="flex-1 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <Dialog.Title className="text-lg font-semibold text-gray-900">
+                <Dialog.Title className="text-lg font-semibold text-gray-700">
                   {title}
                 </Dialog.Title>
                 {description && (
@@ -97,7 +97,7 @@ export function FormDialog({
                 </Dialog.Close>
               )}
             </div>
-            <div className="mt-4 max-h-[calc(80vh-8rem)] overflow-y-auto">
+            <div className="mt-4 max-h-[calc(80vh-8rem)] p-6 overflow-y-auto">
               {children}
             </div>
           </div>

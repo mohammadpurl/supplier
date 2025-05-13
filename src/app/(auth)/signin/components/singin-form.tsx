@@ -61,8 +61,8 @@ const SignInForm = () => {
 
   return (
     <div className="bg-white">
-      <h5 className="text-2xl text-blue-500">ورود | ثبت نام</h5>
-      <p className="mt-2">تنظیم کلیه مستندات حقوقی با کمترین زمان و هزینه</p>
+      <h5 className="text-2xl text-iconPrimary-100">ورود | ثبت نام</h5>
+      {/* <p className="mt-2">تنظیم کلیه مستندات حقوقی با کمترین زمان و هزینه</p> */}
       <form
         className="flex flex-col gap-6 mt-8 p-4"
         onSubmit={handleSubmit(onSubmit)}
@@ -81,7 +81,7 @@ const SignInForm = () => {
         <Button
           type="submit"
           variant="primary"
-          className="bg-blue-600 text-white inline-flex h-12 cursor-pointer select-none gap-2 border border-transparent px-7 text-center items-center justify-center rounded-md transition duration-100 ease-out"
+          className="bg-iconSecondry-50 hover:bg-green-700 text-white inline-flex h-12 cursor-pointer select-none gap-2 border border-transparent px-7 text-center items-center justify-center rounded-md transition duration-100 ease-out"
           isLoading={isPending}
         >
           تایید و دریافت کد
