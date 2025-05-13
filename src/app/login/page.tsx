@@ -3,10 +3,10 @@ import { startTransition, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { sendAuthCode, verify } from "../actions";
+import { sendAuthCode, verify } from "../actions/auth";
 import { SignIn } from "../(auth)/signin/_types/signin.types";
 import { useFormState } from "react-dom";
-import { signInAction } from "../actions";
+import { signInAction } from "../actions/auth";
 import { VerifyUserModel } from "../(auth)/verify/_types/verify-user.type";
 
 const phoneSchema = z.object({

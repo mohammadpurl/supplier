@@ -11,7 +11,7 @@ import { signInSchema } from "../types/signin.schema";
 
 import { useFormState } from "react-dom";
 import { useEffect, useTransition } from "react";
-import { signInAction } from "@/app/actions";
+import { signInAction } from "@/app/actions/auth";
 import { useNotificationStore } from "@/stores/notification.store";
 
 const SignInForm = () => {

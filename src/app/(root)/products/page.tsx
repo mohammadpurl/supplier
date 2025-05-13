@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   PlusIcon,
@@ -12,8 +12,10 @@ import {
 import { ProductForm } from './components/ProductForm'
 import { Table } from '@/components/Table'
 import axios from 'axios'
-import { Product } from './types'
+import { Product } from './_types/product-types'
 import { FormDialog } from '@/components/FormDialog'
+import { useFormState } from 'react-dom'
+import { getProductList } from '@/app/actions/products'
 
 // داده‌های ماک برای تست
 const mockProducts: Product[] = [
@@ -165,6 +167,9 @@ export default function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [getProductsState, getProductsAction] = useFormState(getProductList, undefined);
+
+  const [getProductsPendingState, startTransition] = useTransition();
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product)
@@ -203,24 +208,12 @@ export default function ProductsPage() {
   // به‌روزرسانی تابع fetchProducts برای استفاده از داده‌های ماک
   const fetchProducts = async (page: number, pageSize: number) => {
     try {
-      setIsLoading(true);
+      const formData = new FormData();
+      formData.append('pageNumber', page.toString());
+      formData.append('pageSize', pageSize.toString());
       
-      // شبیه‌سازی تاخیر شبکه
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // محاسبه ایندکس شروع و پایان برای صفحه‌بندی
-      const startIndex = (page - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      
-      // فیلتر کردن داده‌ها برای صفحه فعلی
-      const paginatedData = mockProducts.slice(startIndex, endIndex);
-      
-      setProducts(paginatedData);
-      setPagination({
-        currentPage: page,
-        totalPages: Math.ceil(mockProducts.length / pageSize),
-        pageSize: pageSize,
-        totalItems: mockProducts.length
+      startTransition(() => {
+        getProductsAction(formData);
       });
     } catch (error) {
       console.error('Error fetching products:', error);

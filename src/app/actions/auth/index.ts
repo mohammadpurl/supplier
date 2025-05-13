@@ -8,9 +8,9 @@ import { createData } from "@/core/http-service/http-service";
 
 import { Problem } from "@/types/http-errors.interface";
 import { AuthroizeError, signIn, signOut } from "@/auth";
-import { serverActionWrapper } from "./server-action-wrapper";
-import { SendAuthCode, VerifyUserModel } from "../(auth)/verify/_types/verify-user.type";
-import { SignIn } from "../(auth)/signin/_types/signin.types";
+import { serverActionWrapper } from "../server-action-wrapper";
+import { SendAuthCode, VerifyUserModel } from "../../(auth)/verify/_types/verify-user.type";
+import { SignIn } from "../../(auth)/signin/_types/signin.types";
 
 export async function signInAction(
   formState: OperationResult<string> | null,

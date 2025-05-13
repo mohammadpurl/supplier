@@ -1,6 +1,6 @@
 "use client";
 
-import { logout } from "@/app/actions";
+import { logout } from "@/app/actions/auth";
 import { Loading } from "@/app/_components/loading";
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";

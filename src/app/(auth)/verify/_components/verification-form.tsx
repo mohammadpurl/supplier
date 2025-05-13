@@ -15,7 +15,7 @@ import { useFormState } from "react-dom";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import { sendAuthCode, verify } from "@/app/actions";
+import { sendAuthCode, verify } from "@/app/actions/auth";
 import { useNotificationStore } from "@/stores/notification.store";
 
 
