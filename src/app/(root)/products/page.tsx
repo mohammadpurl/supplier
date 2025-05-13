@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   PlusIcon,
@@ -10,132 +10,171 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import { ProductForm } from './components/ProductForm'
-import { Table } from '../../../components/Table'
+import { Table } from '@/components/Table'
+import axios from 'axios'
+import { Product } from './types'
+import { FormDialog } from '@/components/FormDialog'
 
-
-interface Product {
-  id: number
-  name: string
-  description: string
-  price: number
-  image: string
-  bulkPricing: {
-    quantity: number
-    price: number
-  }[]
-  shippingMethod: 'supplier' | 'company'
-  shippingAreas: string[]
-  warehouses: {
-    id: number
-    name: string
-    address: string
-  }[]
-}
-
-const columns = [
-  { header: "نام", accessor: "name" as keyof Product, sortable: true, width: "200px" },
-  { header: "قیمت", accessor: "price" as keyof Product, sortable: true, width: "120px", render: (v: number) => v + " تومان" },
-  { header: "توضیحات", accessor: "description" as keyof Product, width: "300px" },
-  { header: "آیدی", accessor: "id" as keyof Product, hidden: true },
-  {
-    header: "عملیات",
-    accessor: "actions" as any,
-    render: (_: any, row: Product) => (
-      <div className="flex gap-2">
-        <button
-          className="text-primary-600 hover:text-primary-900"
-          onClick={e => {
-            e.stopPropagation();
-            // ویرایش
-            alert("ویرایش: " + row.id);
-          }}
-        >
-          <PencilIcon className="h-5 w-5" />
-        </button>
-        <button
-          className="text-red-600 hover:text-red-900"
-          onClick={e => {
-            e.stopPropagation();
-            // حذف
-            alert("حذف: " + row.id);
-          }}
-        >
-          <TrashIcon className="h-5 w-5" />
-        </button>
-      </div>
-    ),
-    width: "120px"
-  },
-]
-
-const initialProducts: Product[] = [
+// داده‌های ماک برای تست
+const mockProducts: Product[] = [
   {
     id: 1,
-    name: 'محصول نمونه ۱',
-    description: 'توضیحات محصول نمونه',
-    price: 99.99,
-    image: '/placeholder.png',
+    name: "گوشی سامسونگ Galaxy S21",
+    description: "گوشی هوشمند سامسونگ با صفحه نمایش 6.2 اینچی",
+    price: 25000000,
+    image: "/images/s21.jpg",
+    category: "موبایل",
+    stock: 15,
+    createdAt: "2024-01-15T10:30:00",
     bulkPricing: [
-      { quantity: 1000, price: 89.99 },
-      { quantity: 10000, price: 79.99 },
+      { quantity: 5, price: 24000000 },
+      { quantity: 10, price: 23000000 }
     ],
-    shippingMethod: 'supplier',
-    shippingAreas: ['تهران', 'اصفهان', 'شیراز'],
+    shippingMethod: "supplier",
+    shippingAreas: ["تهران", "اصفهان"],
     warehouses: [
-      {
-        id: 1,
-        name: 'انبار اصلی',
-        address: 'تهران، ایران',
-      },
-    ],
+      { id: 1, name: "انبار مرکزی", address: "تهران، خیابان ولیعصر" }
+    ]
   },
   {
     id: 2,
-    name: 'محصول نمونه ۲',
-    description: 'توضیحات محصول دوم',
-    price: 150.5,
-    image: '/placeholder.png',
+    name: "لپ تاپ لنوو ThinkPad X1",
+    description: "لپ تاپ حرفه‌ای با پردازنده نسل 12",
+    price: 48000000,
+    image: "/images/thinkpad.jpg",
+    category: "لپ تاپ",
+    stock: 8,
+    createdAt: "2024-01-16T14:20:00",
     bulkPricing: [
-      { quantity: 500, price: 140.5 },
-      { quantity: 2000, price: 130.5 },
+      { quantity: 3, price: 47000000 }
     ],
-    shippingMethod: 'company',
-    shippingAreas: ['مشهد', 'تبریز'],
+    shippingMethod: "company",
+    shippingAreas: ["تهران", "مشهد", "شیراز"],
     warehouses: [
-      {
-        id: 2,
-        name: 'انبار دوم',
-        address: 'مشهد، ایران',
-      },
-    ],
+      { id: 2, name: "انبار شرق", address: "مشهد، بلوار سجاد" }
+    ]
   },
   {
     id: 3,
-    name: 'محصول تست ۳',
-    description: 'یک محصول تستی دیگر',
-    price: 75.25,
-    image: '/placeholder.png',
+    name: "هدفون سونی WH-1000XM4",
+    description: "هدفون بی‌سیم با قابلیت حذف نویز",
+    price: 12000000,
+    image: "/images/sony.jpg",
+    category: "صوتی",
+    stock: 25,
+    createdAt: "2024-01-17T09:15:00",
     bulkPricing: [
-      { quantity: 100, price: 70.25 },
+      { quantity: 5, price: 11500000 },
+      { quantity: 10, price: 11000000 }
     ],
-    shippingMethod: 'supplier',
-    shippingAreas: ['شیراز'],
+    shippingMethod: "supplier",
+    shippingAreas: ["تهران", "تبریز", "اصفهان"],
     warehouses: [
-      {
-        id: 3,
-        name: 'انبار سوم',
-        address: 'شیراز، ایران',
-      },
-    ],
+      { id: 3, name: "انبار غرب", address: "تبریز، خیابان آزادی" }
+    ]
   },
+  {
+    id: 4,
+    name: "تبلت آیپد پرو 2023",
+    description: "تبلت اپل با صفحه نمایش 12.9 اینچی",
+    price: 52000000,
+    image: "/images/ipad.jpg",
+    category: "تبلت",
+    stock: 10,
+    createdAt: "2024-01-18T16:40:00",
+    bulkPricing: [
+      { quantity: 2, price: 51000000 },
+      { quantity: 4, price: 50000000 }
+    ],
+    shippingMethod: "company",
+    shippingAreas: ["تهران"],
+    warehouses: [
+      { id: 4, name: "انبار مرکزی", address: "تهران، خیابان شریعتی" }
+    ]
+  },
+  {
+    id: 5,
+    name: "ساعت هوشمند اپل واچ 9",
+    description: "ساعت هوشمند با قابلیت پایش سلامت",
+    price: 18000000,
+    image: "/images/watch.jpg",
+    category: "پوشیدنی",
+    stock: 20,
+    createdAt: "2024-01-19T11:25:00",
+    bulkPricing: [
+      { quantity: 3, price: 17500000 },
+      { quantity: 6, price: 17000000 }
+    ],
+    shippingMethod: "supplier",
+    shippingAreas: ["تهران", "اصفهان", "شیراز", "مشهد"],
+    warehouses: [
+      { id: 5, name: "انبار جنوب", address: "شیراز، بلوار زند" }
+    ]
+  }
+];
+
+const columns = [
+  { header: "نام", accessor: "name" as keyof Product, sortable: true, width: "200px", searchable: true },
+  { header: "قیمت", accessor: "price" as keyof Product, sortable: true, width: "120px", render: (v: number) => v + " تومان" , searchable: true },
+  { header: "توضیحات", accessor: "description" as keyof Product, width: "300px" , searchable: true},
+  { header: "آیدی", accessor: "id" as keyof Product, hidden: true , searchable: true},
+  // {
+  //   header: "عملیات",
+  //   accessor: "actions" as any,
+  //   render: (_: any, row: Product) => (
+  //     <div className="flex gap-2">
+  //       <button
+  //         className="text-primary-600 hover:text-primary-900"
+  //         onClick={e => {
+  //           e.stopPropagation();
+  //           // ویرایش
+  //           console.log('Edit product:', row);
+  //         }}
+  //       >
+  //         <PencilIcon className="h-5 w-5" />
+  //       </button>
+  //       <button
+  //         className="text-red-600 hover:text-red-900"
+  //         onClick={e => {
+  //           e.stopPropagation();
+  //           // حذف
+  //           console.log('Delete product:', row);
+  //         }}
+  //       >
+  //         <TrashIcon className="h-5 w-5" />
+  //       </button>
+  //     </div>
+  //   ),
+  //   width: "120px"
+  // },
 ]
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>(initialProducts)
+  const [products, setProducts] = useState<Product[]>([])
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 10,
+    totalItems: 0
+  })
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showAddProduct, setShowAddProduct] = useState(false)
-  const [selectedRows, setSelectedRows] = useState<Product[]>([])
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product)
+    setShowAddProduct(true)
+  }
+
+  const handleCloseForm = () => {
+    setShowAddProduct(false)
+    setEditingProduct(null)
+  }
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -161,87 +200,156 @@ export default function ProductsPage() {
     }
   }
 
+  // به‌روزرسانی تابع fetchProducts برای استفاده از داده‌های ماک
+  const fetchProducts = async (page: number, pageSize: number) => {
+    try {
+      setIsLoading(true);
+      
+      // شبیه‌سازی تاخیر شبکه
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // محاسبه ایندکس شروع و پایان برای صفحه‌بندی
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      
+      // فیلتر کردن داده‌ها برای صفحه فعلی
+      const paginatedData = mockProducts.slice(startIndex, endIndex);
+      
+      setProducts(paginatedData);
+      setPagination({
+        currentPage: page,
+        totalPages: Math.ceil(mockProducts.length / pageSize),
+        pageSize: pageSize,
+        totalItems: mockProducts.length
+      });
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // به‌روزرسانی تابع handleDelete برای استفاده از داده‌های ماک
+  const handleDelete = async (product: Product) => {
+    try {
+      // شبیه‌سازی تاخیر شبکه
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // حذف محصول از آرایه ماک
+      const updatedProducts = mockProducts.filter(p => p.id !== product.id);
+      mockProducts.length = 0;
+      mockProducts.push(...updatedProducts);
+      
+      // به‌روزرسانی لیست
+      await fetchProducts(pagination.currentPage, pagination.pageSize);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
+
+  // به‌روزرسانی تابع handleBulkDelete برای استفاده از داده‌های ماک
+  const handleBulkDelete = async () => {
+    try {
+      // شبیه‌سازی تاخیر شبکه
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // حذف محصولات انتخاب شده از آرایه ماک
+      const selectedIds = selectedProducts.map(p => p.id);
+      const updatedProducts = mockProducts.filter(p => !selectedIds.includes(p.id));
+      mockProducts.length = 0;
+      mockProducts.push(...updatedProducts);
+      
+      // به‌روزرسانی لیست
+      await fetchProducts(pagination.currentPage, pagination.pageSize);
+      setSelectedProducts([]);
+    } catch (error) {
+      console.error('Error bulk deleting products:', error);
+    }
+  };
+
+  // لود اولیه داده‌ها
+  useEffect(() => {
+    fetchProducts(1, 10);
+  }, []);
+
+  const handleCancel = () => {
+    if (confirm('آیا مطمئن هستید؟')) {
+      setOpen(false)
+    }
+  }
+
   if (showAddProduct) {
     return (
-      <div className="flex ">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-xl font-semibold text-gray-900">افزودن محصول جدید</h1>
-          <button
-            onClick={() => setShowAddProduct(false)}
-            className="text-gray-600 hover:text-gray-900"
-          >
-            بازگشت به لیست محصولات
-          </button>
-        </div>
-        <ProductForm />
-      </div>
+      <FormDialog
+        open={showAddProduct}
+        onOpenChange={setShowAddProduct}
+        title="افزودن محصول جدید"
+        description="لطفاً اطلاعات محصول جدید را وارد کنید"
+        onCancel={handleCloseForm}
+        loading={loading}
+      >
+        <ProductForm product={editingProduct} onClose={handleCloseForm} />
+      </FormDialog>
     )
   }
 
   return (
-    <div>
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">محصولات</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            لیست تمام محصولات موجود در انبار شامل نام، قیمت و جزئیات دیگر.
-          </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+    <div className="container mx-auto p-4">
+      <div className="mb-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">مدیریت محصولات</h1>
+        <div className="flex gap-2">
+          {selectedProducts.length > 0 && (
+            <button
+              onClick={handleBulkDelete}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              حذف {selectedProducts.length} محصول انتخاب شده
+            </button>
+          )}
           <button
-            type="button"
             onClick={() => setShowAddProduct(true)}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
+            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-focus"
           >
-            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             افزودن محصول
           </button>
         </div>
       </div>
 
-      <div className="mt-4 flex space-x-4">
+      <div className="my-4 gap-2 flex space-x-4">
         <button
           type="button"
           onClick={() => setIsImportModalOpen(true)}
-          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="inline-flex gap-2 items-center rounded-md border border-primary bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
-          <ArrowUpTrayIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowUpTrayIcon className="-ml-1 mr-2 h-5 w-5 text-iconPrimary-100" aria-hidden="true" />
           وارد کردن
         </button>
         <button
           type="button"
           onClick={handleExport}
-          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="inline-flex gap-2 items-center rounded-md border border-primary bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
-          <ArrowDownTrayIcon className="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowDownTrayIcon className="-ml-1 mr-2 h-5 w-5 text-iconPrimary-100" aria-hidden="true" />
           خروجی گرفتن
         </button>
       </div>
 
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <Table
-              columns={columns}
-              data={products}
-              selectable={true}
-              onSelectionChange={setSelectedRows}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex gap-2 mb-4">
-        <button
-          className="btn-primary"
-          onClick={() => {
-            // همه سطرهای انتخاب‌شده
-            console.log(selectedRows);
-            alert("سطرهای انتخاب‌ شده: " + selectedRows.map(r => r.id).join(", "));
+      <div className="bg-white rounded-lg shadow">
+        <Table
+          columns={columns}
+          data={products}
+          pagination={pagination}
+          onPageChange={fetchProducts}
+          selectable={true}
+          onSelectionChange={setSelectedProducts}
+          rowActions={{
+            showEdit: true,
+            showDelete: true,
+            onEdit: handleEdit,
+            onDelete: handleDelete
           }}
-        >
-          دریافت سطرهای انتخاب‌شده
-        </button>
+          className="bg-white"
+        />
       </div>
 
       {/* Import Modal */}

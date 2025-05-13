@@ -9,7 +9,7 @@ export default async function Header() {
 
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white shadow">
+    <header className=" top-0 z-40 w-full bg-white shadow">
       <div className="container mx-auto px-10 sm:px-32">
         <div className="flex h-16 items-center justify-between">
           {/* Left side */}

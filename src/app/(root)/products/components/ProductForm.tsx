@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Product } from '../types'
 
 const productFormSchema = z.object({
   name: z.string().min(2, {
@@ -44,13 +45,18 @@ const productFormSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productFormSchema>
 
-export function ProductForm() {
+type ProductFormProps = {
+  product?: Product | null
+  onClose?: () => void
+}
+
+export function ProductForm({ product, onClose }: ProductFormProps) {
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      price: '',
+      name: product?.name || '',
+      description: product?.description || '',
+      price: product?.price?.toString() || '',
       bulkPrice: '',
       bulkQuantity: '',
       tieredPrices: [],
@@ -59,11 +65,13 @@ export function ProductForm() {
 
   function onSubmit(data: ProductFormValues) {
     console.log(data)
+    // اینجا می‌توانید عملیات ذخیره را انجام دهید
+    onClose?.()
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="name"
