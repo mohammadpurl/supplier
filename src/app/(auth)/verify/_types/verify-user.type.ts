@@ -6,3 +6,11 @@ export type VerifyUserModel = {
 export type SendAuthCode = {
   mobile: string;
 };
+
+export type NewVerifyUserModel = {
+  formData: FormData;
+};
+
+export type NNewVerifyUserModel = {
+  formData: URLSearchParams;
+};

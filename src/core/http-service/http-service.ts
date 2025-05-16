@@ -59,11 +59,19 @@ async function createData<TModel, TResult>(
 ): Promise<TResult> {
   const options: AxiosRequestConfig = {
     method: "POST",
-    headers: headers,
-    data: JSON.stringify(data),
+    headers: {
+      ...headers,
+      "Content-Type": data && (data as any).formData instanceof URLSearchParams 
+        ? "application/x-www-form-urlencoded" 
+        : "application/json"
+    },
+    data: data && (data as any).formData instanceof URLSearchParams 
+      ? (data as any).formData 
+      : JSON.stringify(data)
   };
-  console.log(JSON.stringify(data));
+  console.log(options.data);
   console.log(url);
+  console.log("headers is:",options.headers);
   return await apiBase<TResult>(url, options);
 }
 

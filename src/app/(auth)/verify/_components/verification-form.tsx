@@ -19,6 +19,7 @@ import { sendAuthCode, verify } from "@/app/actions/auth";
 import { useNotificationStore } from "@/stores/notification.store";
 
 
+
 const getTwoMinutesFromNow = () => {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 120);
@@ -102,11 +103,16 @@ const VerificationForm = ({ mobile }: { mobile: string }) => {
 
   const onSubmit = (data: VerifyUserModel) => {
     data.mobile = username;
-
+    const formData = new FormData();
+    formData.append("grant_type", "password");
+    formData.append("username", data.mobile);
+    formData.append("password", data.code);
+    formData.append("scope", "user");
+    formData.append("client_id", "supplier-client");
+    formData.append("client_secret", "supplier-secret");
     startTransition(() => {
       verifyAction({
-        mobile: data.mobile,
-        code: data.code,
+        formData,
       });
     });
   };

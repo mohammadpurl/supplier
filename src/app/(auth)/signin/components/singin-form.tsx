@@ -81,7 +81,7 @@ const SignInForm = () => {
         <Button
           type="submit"
           variant="primary"
-          className="bg-iconSecondry-50 hover:bg-green-700 text-white inline-flex h-12 cursor-pointer select-none gap-2 border border-transparent px-7 text-center items-center justify-center rounded-md transition duration-100 ease-out"
+          className="bg-iconSecondry-50 hover:bg-green-700   text-white inline-flex h-12 cursor-pointer select-none gap-2 border border-iconSecondry-50 px-7 text-center items-center justify-center rounded-md transition duration-100 ease-out"
           isLoading={isPending}
         >
           تایید و دریافت کد

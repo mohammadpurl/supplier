@@ -9,7 +9,7 @@ import { createData } from "@/core/http-service/http-service";
 import { Problem } from "@/types/http-errors.interface";
 import { AuthroizeError, signIn, signOut } from "@/auth";
 import { serverActionWrapper } from "../server-action-wrapper";
-import { SendAuthCode, VerifyUserModel } from "../../(auth)/verify/_types/verify-user.type";
+import { NewVerifyUserModel, NNewVerifyUserModel, SendAuthCode, VerifyUserModel } from "../../(auth)/verify/_types/verify-user.type";
 import { SignIn } from "../../(auth)/signin/_types/signin.types";
 
 export async function signInAction(
@@ -51,13 +51,13 @@ export async function sendAuthCode(
 
 export async function verify(
   prevState: OperationResult<void> | undefined,
-  model: VerifyUserModel
+  model: NewVerifyUserModel
 ) {
   try {
-    console.log("Verifying code for mobile:", model.mobile);
+    console.log("Verifying code for mobile:", model.formData);
     const result = await signIn("credentials", {
-      mobile: model.mobile,
-      code: model.code,
+      username: model.formData.get("username") as string,
+      password: model.formData.get("password") as string,
       redirect: false,
     });
 
