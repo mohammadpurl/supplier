@@ -2,11 +2,13 @@ import { API_URL } from "@/configs/global";
 
 import { ApiError } from "@/types/http-errors.interface";
 import axios, {
+  AxiosHeaders,
   AxiosRequestConfig,
   AxiosRequestHeaders,
   AxiosResponse,
 } from "axios";
 import { errorHandler, networkErrorStrategy } from "./http-error-strategies";
+import { auth } from "@/auth";
 
 const httpService = axios.create({
   baseURL: API_URL,
@@ -43,10 +45,15 @@ async function apiBase<T>(
 
 async function readData<T>(
   url: string,
-  headers?: AxiosRequestHeaders
+  headers?: Record<string, string>
 ): Promise<T> {
+  const session = await auth();
+  headers = { ...headers };
+  if (session?.user?.accessToken) {
+    headers['Authorization'] = `Bearer ${session.user.accessToken}`;
+  }
   const options: AxiosRequestConfig = {
-    headers: headers,
+    headers,
     method: "GET",
   };
   return await apiBase<T>(url, options);

@@ -23,7 +23,7 @@ export const useNotificationStore = create<NotificationState>()(
 
             setTimeout(() => {
                 get().dismissNotification(id);
-            }, 5000);
+            }, 200000);
         },
         dismissNotification: (id) => {
             set((state) => ({

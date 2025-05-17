@@ -12,14 +12,6 @@ export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const session = await auth();
 
-  // Clone the request headers
-  const requestHeaders = new Headers(request.headers);
-  
-  // Add the Authorization header if we have a session
-  if (session?.user?.accessToken) {
-    requestHeaders.set('Authorization', `Bearer ${session.user.accessToken}`);
-  }
-
   // اگر کاربر لاگین است و می‌خواهد به صفحه signin یا verify برود، ریدایرکت کن به صفحه اصلی
   if (session && ["/signin", "/verify"].some((p) => nextUrl.pathname.startsWith(p))) {
     return NextResponse.redirect(new URL("/", nextUrl));
@@ -37,12 +29,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Return response with new headers
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // Create a new response
+  const response = NextResponse.next();
+
+  // Add the Authorization header if we have a session
+  if (session?.user?.accessToken) {
+    response.headers.set('Authorization', `Bearer ${session.user.accessToken}`);
+  }
+
+  console.log("response in middleware is",response)
+  return response;
 }
 
 // فقط روی مسیرهای داشبورد اجرا شود یا کل سایت (بسته به نیازت)

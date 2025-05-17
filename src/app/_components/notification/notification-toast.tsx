@@ -14,20 +14,22 @@ const notificationTypes: Record<NotificationType, string> = {
 };
 
 const notificationIcons: Record<NotificationType, ReactNode> = {
-  success: <IconCheck width={20} height={20} color="white" />,
-  info: <IconInfo width={20} height={20} color="white" />,
-  warning: <IconInfo width={20} height={20} color="white" />,
-  error: <IconError width={20} height={20} color="white" />,
+  success: <IconCheck width={20} height={20} color="green" />,
+  info: <IconInfo width={20} height={20} color="black" />,
+  warning: <IconInfo width={20} height={20} color="yellow" />,
+  error: <IconError width={20} height={20} color="red" />,
 };
 
 export const NotificationToast: React.FC<NotificationToastProps> = ({
-  notification: { id, message, type, duration = 5000 },
+  notification: { id, message, type, duration = 200000 },
 }) => {
   const dismissNotification = useNotificationStore(
     (state) => state.dismissNotification
   );
   const [progessValue, setProgressValue] = useState<number>(100);
+
   useEffect(() => {
+    
     const interval = duration / 100;
     const intervalId = setInterval(() => {
       setProgressValue((oldValue) =>
@@ -38,7 +40,7 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
   }, [duration]);
   return (
     <div className="notification">
-      <div className={`notification-icon ${notificationTypes[type]}`}>
+      <div className={`flex notification-icon ${notificationTypes[type]}`}>
         {notificationIcons[type]}
       </div>
       <div className="text-sm font-semibold">{message}</div>

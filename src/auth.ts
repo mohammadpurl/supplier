@@ -70,7 +70,7 @@ export const {
             `${API_URL}/auth/check-otp`,
             { formData }
           );
-          console.log("logged innnnnnnnnnnn",user)
+          
           // Auth.js expects the user object to be returned
           return {
             accessToken: user.access_token,
@@ -82,21 +82,16 @@ export const {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      console.log("jwt");
-      console.log(user);
+    async jwt({ token, user }) {      
       if (user) {
         token.user = jwtDecode<UserToken>(user.accessToken);
-        token.user.accessToken = user.accessToken;
-        console.log("jwt accessToken",token)
+        token.user.accessToken = user.accessToken;        
       }
-
       return token;
     },
-    async session({ session, token }) {
-      console.log("dgggtttthgh",token)
-      Object.assign(session.user, token.user ?? {});
-      console.log("sessionsessionsessionsessionsession",session)
+    async session({ session, token }) {      
+      Object.assign(session.user, token.user ?? {});     
+      console.log(token)
       return session;
     },
   },

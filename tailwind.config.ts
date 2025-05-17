@@ -119,7 +119,8 @@ module.exports = {
         },
         iconSecondry:{
           50:'#007945'
-        },        
+        },  
+        transparent: "transparent",        
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

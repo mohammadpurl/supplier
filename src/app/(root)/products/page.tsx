@@ -301,9 +301,10 @@ export default function ProductsPage() {
           )}
           <button
             onClick={() => setShowAddProduct(true)}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-focus"
+            className="px-4 py-2 bg-iconSecondry-50 text-white rounded hover:bg-primary-focus"
           >
             افزودن محصول
+            +
           </button>
         </div>
       </div>
@@ -325,6 +326,7 @@ export default function ProductsPage() {
           <ArrowDownTrayIcon className="-ml-1 mr-2 h-5 w-5 text-iconPrimary-100" aria-hidden="true" />
           خروجی گرفتن
         </button>
+       
       </div>
 
       <div className="bg-white rounded-lg shadow">

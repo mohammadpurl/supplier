@@ -183,13 +183,13 @@ export function Table<T extends { id: string | number }>({
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto">
-        <table className={`min-w-full border border-primary ${className ?? ""}`}>
+        <table className={`min-w-full border border-iconSecondry-50 ${className ?? ""}`}>
           <thead>
             <tr>
               {selectable && (
                 <th
                   style={{ width: checkboxColumnWidth, minWidth: checkboxColumnWidth, maxWidth: checkboxColumnWidth }}
-                  className="px-2 py-2 border border-primary"
+                  className="px-2 py-2 border border-iconSecondry-50"
                 >
                   <input
                     type="checkbox"
@@ -216,18 +216,18 @@ export function Table<T extends { id: string | number }>({
                     userSelect: "none",
                     padding: 0,
                   }}
-                  className="border border-primary group"
+                  className="border border-iconSecondry-50 group"
                 >
                   <div className="flex flex-col">
                     {/* Search Input */}
-                    <div className="px-2 py-1 border-b border-primary">
+                    <div className="px-2 py-1 border-b border-iconSecondry-50">
                       <input
                         type="text"
                         placeholder={`جستجو در ${col.header}`}
                         value={searchValues[col.accessor as string] || ''}
                         onChange={(e) => handleSearch(col.accessor, e.target.value)}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full px-2 py-1 text-sm bg-white border border-primary rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full px-2 py-1 text-sm bg-white border border-iconSecondry-50 rounded focus:outline-none focus:border-iconSecondry-50 focus:ring-1 focus:ring-primary"
                       />
                     </div>
                     {/* Column Header */}
@@ -265,7 +265,7 @@ export function Table<T extends { id: string | number }>({
                 </th>
               ))}
               {(rowActions?.showEdit || rowActions?.showDelete) && (
-                <th className="px-4 py-2 border border-primary text-right" style={{ width: 100 }}>
+                <th className="px-4 py-2 border border-iconSecondry-50 text-right" style={{ width: 100 }}>
                   عملیات
                 </th>
               )}
@@ -275,13 +275,13 @@ export function Table<T extends { id: string | number }>({
             {filteredAndSortedData.map((row, idx) => (
               <tr
                 key={idx}
-                className="border-b border-primary hover:bg-gray-50"
+                className="border-b border-iconSecondry-50 hover:bg-gray-50"
                 onClick={() => onRowClick?.(row)}
               >
                 {selectable && (
                   <td
                     style={{ width: checkboxColumnWidth, minWidth: checkboxColumnWidth, maxWidth: checkboxColumnWidth }}
-                    className="px-2 py-2 border border-primary"
+                    className="px-2 py-2 border border-iconSecondry-50"
                   >
                     <input
                       type="checkbox"
@@ -294,14 +294,14 @@ export function Table<T extends { id: string | number }>({
                   </td>
                 )}
                 {columns.filter(col => !col.hidden).map((col) => (
-                  <td key={col.header} className="px-4 py-2 border border-primary">
+                  <td key={col.header} className="px-4 py-2 border border-iconSecondry-50">
                     {col.render
                       ? col.render(row[col.accessor], row)
                       : (row[col.accessor] as React.ReactNode)}
                   </td>
                 ))}
                 {(rowActions?.showEdit || rowActions?.showDelete) && (
-                  <td className="px-4 py-2 border border-primary">
+                  <td className="px-4 py-2 border border-iconSecondry-50">
                     <div className="flex items-center gap-2 justify-end">
                       {rowActions.showEdit && (
                         <button
@@ -351,7 +351,7 @@ export function Table<T extends { id: string | number }>({
             </AlertDialog.Description>
             <div className="flex justify-end gap-3">
               <AlertDialog.Cancel asChild>
-                <button className="px-4 py-2 text-sm border border-primary rounded hover:bg-gray-50">
+                <button className="px-4 py-2 text-sm border border-iconSecondry-50 rounded hover:bg-gray-50">
                   انصراف
                 </button>
               </AlertDialog.Cancel>
@@ -370,7 +370,7 @@ export function Table<T extends { id: string | number }>({
 
       {/* Pagination */}
       {pagination && (
-        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-primary">
+        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-iconSecondry-50">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">
               نمایش {((pagination.currentPage - 1) * pagination.pageSize) + 1} تا{' '}
@@ -380,7 +380,7 @@ export function Table<T extends { id: string | number }>({
             <select
               value={pagination.pageSize}
               onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-              className="px-2 py-1 text-sm border border-primary rounded focus:outline-none focus:ring-1 focus:ring-primary"
+              className="px-2 py-1 text-sm border border-iconSecondry-50 rounded focus:outline-none focus:ring-1 focus:ring-primary"
             >
               {pageSizeOptions.map(size => (
                 <option key={size} value={size}>
@@ -394,7 +394,7 @@ export function Table<T extends { id: string | number }>({
             <button
               onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={pagination.currentPage === 1 || isLoadingPage}
-              className="px-3 py-1 text-sm bg-white border border-primary rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm bg-white border border-iconSecondry-50 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               قبلی
             </button>
@@ -409,8 +409,8 @@ export function Table<T extends { id: string | number }>({
                     disabled={page === pagination.currentPage || isLoadingPage}
                     className={`px-3 py-1 text-sm border rounded
                       ${page === pagination.currentPage
-                        ? 'bg-primary text-white border-primary'
-                        : 'bg-white border-primary hover:bg-gray-50'
+                        ? 'bg-primary text-white border-iconSecondry-50'
+                        : 'bg-white border-iconSecondry-50 hover:bg-gray-50'
                       }
                       disabled:opacity-50 disabled:cursor-not-allowed`
                     }
@@ -424,7 +424,7 @@ export function Table<T extends { id: string | number }>({
             <button
               onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={pagination.currentPage === pagination.totalPages || isLoadingPage}
-              className="px-3 py-1 text-sm bg-white border border-primary rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm bg-white border border-iconSecondry-50 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               بعدی
             </button>
