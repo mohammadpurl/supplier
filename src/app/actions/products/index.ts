@@ -11,6 +11,7 @@ export async function getProductList(
   formData: FormData
 ): Promise<OperationResult<PaginatedResponse<ProductS>>> {
   try {
+    console.log("inside getProductList ....")
     const pagination: PaginationRequest = {
       pageSize: Number(formData.get('pageSize')) || 10,
       pageNumber: Number(formData.get('pageNumber')) || 1,
@@ -30,7 +31,7 @@ export async function getProductList(
     const result = await serverActionWrapper(    
       async () => await readData<PaginatedResponse<ProductS>>(`/product/get-productList?${queryParams}`)
     );
-
+    console.log("getProductList ....",result)
     if (result?.error) {
       return {
         isSuccess: false,

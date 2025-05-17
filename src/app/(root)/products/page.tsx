@@ -16,6 +16,8 @@ import { Product } from './_types/product-types'
 import { FormDialog } from '@/components/FormDialog'
 import { useFormState } from 'react-dom'
 import { getProductList } from '@/app/actions/products'
+import { useNotificationStore } from '@/stores/notification.store'
+
 
 // داده‌های ماک برای تست
 const mockProducts: Product[] = [
@@ -180,7 +182,9 @@ export default function ProductsPage() {
     setShowAddProduct(false)
     setEditingProduct(null)
   }
-
+  const showNotification = useNotificationStore(
+    (state) => state.showNotification
+  );
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
@@ -204,6 +208,7 @@ export default function ProductsPage() {
       setSelectedFile(null)
     }
   }
+  
 
   // به‌روزرسانی تابع fetchProducts برای استفاده از داده‌های ماک
   const fetchProducts = async (page: number, pageSize: number) => {
@@ -212,7 +217,7 @@ export default function ProductsPage() {
       formData.append('pageNumber', page.toString());
       formData.append('pageSize', pageSize.toString());
       
-      startTransition(() => {
+      startTransition(() => {        
         getProductsAction(formData);
       });
     } catch (error) {
@@ -221,6 +226,15 @@ export default function ProductsPage() {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    
+    if (getProductsState && !getProductsState.isSuccess && getProductsState?.error?.detail) {      
+      showNotification({
+        message: getProductsState?.error.detail,
+        type: "error",
+      });
+    } 
+  }, [getProductsState, showNotification]);
 
   // به‌روزرسانی تابع handleDelete برای استفاده از داده‌های ماک
   const handleDelete = async (product: Product) => {

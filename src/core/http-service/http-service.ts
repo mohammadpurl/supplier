@@ -47,25 +47,24 @@ async function readData<T>(
   url: string,
   headers?: Record<string, string>
 ): Promise<T> {
-  const session = await auth();
-  headers = { ...headers };
-  if (session?.user?.accessToken) {
-    headers['Authorization'] = `Bearer ${session.user.accessToken}`;
-  }
+  headers = await addAuthrizationHeader(headers)
   const options: AxiosRequestConfig = {
     headers,
     method: "GET",
   };
-  return await apiBase<T>(url, options);
+  const result =  await apiBase<T>(url, options);
+  console.log("inside readData",result)
+  return result
 }
 
 async function createData<TModel, TResult>(
   url: string,
   data: TModel,
-  headers?: AxiosRequestHeaders
+  headers?: Record<string, string>
 ): Promise<TResult> {
+  headers = await addAuthrizationHeader(headers);
   const options: AxiosRequestConfig = {
-    method: "POST",
+    method: "POST",    
     headers: {
       ...headers,
       "Content-Type": data && (data as any).formData instanceof URLSearchParams 
@@ -76,17 +75,16 @@ async function createData<TModel, TResult>(
       ? (data as any).formData 
       : JSON.stringify(data)
   };
-  console.log(options.data);
-  console.log(url);
-  console.log("headers is:",options.headers);
+  
   return await apiBase<TResult>(url, options);
 }
 
 async function updateData<TModel, TResult>(
   url: string,
   data: TModel,
-  headers?: AxiosRequestHeaders
+  headers?: Record<string, string>
 ): Promise<TResult> {
+  headers = await addAuthrizationHeader(headers);
   const options: AxiosRequestConfig = {
     method: "PUT",
     headers: headers,
@@ -98,14 +96,24 @@ async function updateData<TModel, TResult>(
 
 async function deleteData(
   url: string,
-  headers?: AxiosRequestHeaders
+  headers?: Record<string, string>
 ): Promise<void> {
+  headers = await addAuthrizationHeader(headers);
   const options: AxiosRequestConfig = {
     method: "DELETE",
     headers: headers,
   };
 
   return await apiBase(url, options);
+}
+
+async function addAuthrizationHeader(headers?: Record<string, string>): Promise<Record<string, string>> {
+  const session = await auth();
+  headers = { ...headers };
+  if (session?.user?.accessToken) {
+    headers['Authorization'] = `Bearer ${session.user.accessToken}`;
+  }
+  return headers;
 }
 
 export { createData, readData, updateData, deleteData };

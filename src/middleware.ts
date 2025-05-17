@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Authorization', `Bearer ${session.user.accessToken}`);
   }
 
-  console.log("response in middleware is",response)
+  
   return response;
 }
 
